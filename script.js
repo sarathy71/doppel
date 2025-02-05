@@ -22,15 +22,11 @@ function populateTable(data) {
         const row = `
             <tr>
                 <td>${item.symbol}</td>
-                <td>${item.start}</td>
                 <td>${item.end}</td>
                 <td>${item.price_pc}</td>
                 <td>${item.price_ft_pc}</td>
                 <td>${item.volume_pc}</td>
                 <td>${item.vol_ft_pc}</td>
-                <td>${item.twin_start}</td>
-                <td>${item.twin_end}</td>
-                <td>${item.win_length}</td>
             </tr>
         `;
         tableBody.innerHTML += row;
