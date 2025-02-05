@@ -9,12 +9,13 @@ async function fetchStockData() {
         populateTable(data);
     } catch (error) {
         console.error("Error fetching data:", error);
-        alert("Failed to load data. Please try again.");
+        document.getElementById("loading").innerText = "Failed to load data.";
     }
 }
 
 function populateTable(data) {
     const tableBody = document.querySelector("#stock-table tbody");
+    const loadingText = document.getElementById("loading");
     tableBody.innerHTML = "";  // Clear previous data
 
     data.forEach(item => {
@@ -34,5 +35,9 @@ function populateTable(data) {
         `;
         tableBody.innerHTML += row;
     });
+
+    loadingText.style.display = "none"; // Hide loading text after data loads
 }
 
+// Auto-load data when the page loads
+document.addEventListener("DOMContentLoaded", fetchStockData);
