@@ -5,17 +5,17 @@ let currentSortOrder = "asc";
 // Function to populate dropdowns dynamically
 function populateDropdowns() {
     const endDateN = document.getElementById("endDateN");
-    
-    // Populate N dropdown (1-10)
+
+    // Populate N dropdown (0-10, where 0 means today)
     for (let i = 0; i <= 10; i++) {
         let option = document.createElement("option");
         option.value = i;
         option.textContent = i;
         endDateN.appendChild(option);
     }
-    
-    // Set default filter to "Last 1 Day(s)"
-    endDateN.value = "1";
+
+    // Set default filter to "Last 0 Day(s)" (Today)
+    endDateN.value = "0";
     document.getElementById("endDateM").value = "day";
 }
 
@@ -62,9 +62,9 @@ function applyFilters() {
     fetchStockData(filters, currentSortColumn, currentSortOrder);
 }
 
-// Function to clear filters and reset to 'All'
+// Function to clear filters and reset to 'Last 0 Day(s)'
 function clearFilters() {
-    document.getElementById("endDateN").value = "1";
+    document.getElementById("endDateN").value = "0";
     document.getElementById("endDateM").value = "day";
     document.getElementById("priceFilter").value = "";
     document.getElementById("priceFtFilter").value = "";
@@ -75,18 +75,6 @@ function clearFilters() {
     currentSortOrder = "asc";
 
     fetchStockData();
-}
-
-// Function to handle sorting
-function sortTable(column) {
-    if (currentSortColumn === column) {
-        currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
-    } else {
-        currentSortColumn = column;
-        currentSortOrder = "asc";
-    }
-
-    fetchStockData({}, currentSortColumn, currentSortOrder);
 }
 
 // Function to populate table
