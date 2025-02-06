@@ -6,7 +6,6 @@ let currentSortOrder = "asc";
 function populateDropdowns() {
     const endDateN = document.getElementById("endDateN");
 
-    // Populate N dropdown (0-10, where 0 means today)
     for (let i = 0; i <= 10; i++) {
         let option = document.createElement("option");
         option.value = i;
@@ -14,7 +13,6 @@ function populateDropdowns() {
         endDateN.appendChild(option);
     }
 
-    // Set default filter to "Last 0 Day(s)" (Today)
     endDateN.value = "0";
     document.getElementById("endDateM").value = "day";
 }
@@ -23,18 +21,21 @@ function populateDropdowns() {
 async function fetchStockData(filters = {}, sortColumn = "", sortOrder = "") {
     try {
         let url = API_URL + "?";
-        Object.keys(filters).forEach((key, index) => {
+        let params = [];
+
+        Object.keys(filters).forEach((key) => {
             if (filters[key]) {
-                url += `${index > 0 ? "&" : ""}${key}=${filters[key]}`;
+                params.push(`${key}=${filters[key]}`);
             }
         });
 
-        // Add sorting parameters
         if (sortColumn) {
-            url += `&sort_by=${sortColumn}&order=${sortOrder}`;
+            params.push(`sort_by=${sortColumn}&order=${sortOrder}`);
         }
 
-        console.log("Fetching data from API with URL:", url);
+        url += params.join("&");
+
+        console.log("Fetching data from API:", url);
         const response = await fetch(url);
 
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -53,12 +54,13 @@ function applyFilters() {
     const filters = {
         end_date_n: document.getElementById("endDateN").value,
         end_date_m: document.getElementById("endDateM").value,
-        price_pc: document.getElementById("priceFilter").value,
-        price_ft_pc: document.getElementById("priceFtFilter").value,
-        volume_pc: document.getElementById("volumeFilter").value,
-        vol_ft_pc: document.getElementById("volumeFtFilter").value
+        price_pc: document.getElementById("priceFilter").value || null,
+        price_ft_pc: document.getElementById("priceFtFilter").value || null,
+        volume_pc: document.getElementById("volumeFilter").value || null,
+        vol_ft_pc: document.getElementById("volumeFtFilter").value || null
     };
 
+    console.log("Applying filters:", filters);
     fetchStockData(filters, currentSortColumn, currentSortOrder);
 }
 
@@ -77,6 +79,18 @@ function clearFilters() {
     fetchStockData();
 }
 
+// Function to handle sorting
+function sortTable(column) {
+    if (currentSortColumn === column) {
+        currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
+    } else {
+        currentSortColumn = column;
+        currentSortOrder = "asc";
+    }
+
+    fetchStockData({}, currentSortColumn, currentSortOrder);
+}
+
 // Function to populate table
 function populateTable(data) {
     const tableBody = document.querySelector("#stock-table tbody");
@@ -92,7 +106,7 @@ function populateTable(data) {
         const row = `
             <tr>
                 <td>${item.symbol}</td>
-                <td>${item.end_date ? item.end_date : "N/A"}</td>  <!-- Fix reference to end_date -->
+                <td>${item.end_date ? item.end_date : "N/A"}</td>
                 <td>${item.price_pc}</td>
                 <td>${item.price_ft_pc}</td>
                 <td>${item.volume_pc}</td>
@@ -102,7 +116,7 @@ function populateTable(data) {
         tableBody.innerHTML += row;
     });
 
-    loadingText.style.display = "none"; // Hide loading text after data loads
+    loadingText.style.display = "none";
 }
 
 // Auto-load data and populate dropdowns
