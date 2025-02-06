@@ -1,9 +1,34 @@
 const API_URL = "https://hello-world-service-6uymma27bq-uc.a.run.app/";
 
-async function fetchStockData() {
+// Predefined filter values
+const filterValues = [65, 70, 75, 80, 85, 90, 95];
+
+// Function to populate dropdowns
+function populateDropdowns() {
+    const dropdowns = ["priceFilter", "priceFtFilter", "volumeFilter", "volumeFtFilter"];
+    dropdowns.forEach(id => {
+        const select = document.getElementById(id);
+        filterValues.forEach(value => {
+            let option = document.createElement("option");
+            option.value = value;
+            option.textContent = `>${value}`;
+            select.appendChild(option);
+        });
+    });
+}
+
+// Function to fetch data with filters
+async function fetchStockData(filters = {}) {
     try {
-        console.log("Fetching data from API...");
-        const response = await fetch(API_URL);
+        let url = API_URL + "?";
+        Object.keys(filters).forEach((key, index) => {
+            if (filters[key]) {
+                url += `${index > 0 ? "&" : ""}${key}=${filters[key]}`;
+            }
+        });
+
+        console.log("Fetching data from API with URL:", url);
+        const response = await fetch(url);
         
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
@@ -16,6 +41,19 @@ async function fetchStockData() {
     }
 }
 
+// Function to apply filters
+function applyFilters() {
+    const filters = {
+        price_pc: document.getElementById("priceFilter").value,
+        price_ft_pc: document.getElementById("priceFtFilter").value,
+        volume_pc: document.getElementById("volumeFilter").value,
+        vol_ft_pc: document.getElementById("volumeFtFilter").value
+    };
+
+    fetchStockData(filters);
+}
+
+// Function to populate table
 function populateTable(data) {
     const tableBody = document.querySelector("#stock-table tbody");
     const loadingText = document.getElementById("loading");
@@ -43,5 +81,8 @@ function populateTable(data) {
     loadingText.style.display = "none"; // Hide loading text after data loads
 }
 
-// Auto-load data when the page loads
-document.addEventListener("DOMContentLoaded", fetchStockData);
+// Auto-load data and populate dropdowns
+document.addEventListener("DOMContentLoaded", () => {
+    populateDropdowns();
+    fetchStockData();
+});
