@@ -7,7 +7,7 @@ function populateDropdowns() {
     const endDateN = document.getElementById("endDateN");
     
     // Populate N dropdown (1-10)
-    for (let i = 0; i <= 10; i++) {
+    for (let i = 1; i <= 10; i++) {
         let option = document.createElement("option");
         option.value = i;
         option.textContent = i;
@@ -75,6 +75,46 @@ function clearFilters() {
     currentSortOrder = "asc";
 
     fetchStockData();
+}
+
+// Function to handle sorting
+function sortTable(column) {
+    if (currentSortColumn === column) {
+        currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
+    } else {
+        currentSortColumn = column;
+        currentSortOrder = "asc";
+    }
+
+    fetchStockData({}, currentSortColumn, currentSortOrder);
+}
+
+// Function to populate table
+function populateTable(data) {
+    const tableBody = document.querySelector("#stock-table tbody");
+    const loadingText = document.getElementById("loading");
+    tableBody.innerHTML = "";  // Clear previous data
+
+    if (!Array.isArray(data) || data.length === 0) {
+        loadingText.innerText = "No data available.";
+        return;
+    }
+
+    data.forEach(item => {
+        const row = `
+            <tr>
+                <td>${item.symbol}</td>
+                <td>${item.end}</td>
+                <td>${item.price_pc}</td>
+                <td>${item.price_ft_pc}</td>
+                <td>${item.volume_pc}</td>
+                <td>${item.vol_ft_pc}</td>
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+
+    loadingText.style.display = "none"; // Hide loading text after data loads
 }
 
 // Auto-load data and populate dropdowns
