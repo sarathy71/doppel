@@ -13,29 +13,34 @@
     <div>
         <label for="priceFilter">Price (%) :</label>
         <select id="priceFilter">
-            <option value="">85</option>
-            <option value="">95</option>
+            <option value="">All</option>
+            <option value="85">85</option>
+            <option value="95">95</option>
         </select>
 
         <label for="priceFtFilter">Price FT (%) :</label>
         <select id="priceFtFilter">
-            <option value="">85</option>
-            <option value="">95</option>
+            <option value="">All</option>
+            <option value="85">85</option>
+            <option value="95">95</option>
         </select>
 
         <label for="volumeFilter">Volume (%) :</label>
         <select id="volumeFilter">
-            <option value="">85</option>
-            <option value="">95</option>
+            <option value="">All</option>
+            <option value="85">85</option>
+            <option value="95">95</option>
         </select>
 
         <label for="volumeFtFilter">Volume FT (%) :</label>
         <select id="volumeFtFilter">
-           <option value="">85</option>
-            <option value="">95</option>
+            <option value="">All</option>
+            <option value="85">85</option>
+            <option value="95">95</option>
         </select>
 
         <button onclick="applyFilters()">Apply Filters</button>
+        <button onclick="clearFilters()">Clear Filters</button>
     </div>
 
     <div id="loading">Loading data...</div>
