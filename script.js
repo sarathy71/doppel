@@ -92,7 +92,7 @@ function populateTable(data) {
         const row = `
             <tr>
                 <td>${item.symbol}</td>
-                <td>${item.end}</td>
+                <td>${item.end_date}</td>
                 <td>${item.price_pc}</td>
                 <td>${item.price_ft_pc}</td>
                 <td>${item.volume_pc}</td>
