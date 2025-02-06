@@ -1,22 +1,5 @@
 const API_URL = "https://hello-world-service-6uymma27bq-uc.a.run.app/";
 
-// Predefined filter values
-const filterValues = [65, 70, 75, 80, 85, 90, 95];
-
-// Function to populate dropdowns
-function populateDropdowns() {
-    const dropdowns = ["priceFilter", "priceFtFilter", "volumeFilter", "volumeFtFilter"];
-    dropdowns.forEach(id => {
-        const select = document.getElementById(id);
-        filterValues.forEach(value => {
-            let option = document.createElement("option");
-            option.value = value;
-            option.textContent = `>${value}`;
-            select.appendChild(option);
-        });
-    });
-}
-
 // Function to fetch data with filters
 async function fetchStockData(filters = {}) {
     try {
@@ -53,6 +36,16 @@ function applyFilters() {
     fetchStockData(filters);
 }
 
+// Function to clear filters and reset to 'All'
+function clearFilters() {
+    document.getElementById("priceFilter").value = "";
+    document.getElementById("priceFtFilter").value = "";
+    document.getElementById("volumeFilter").value = "";
+    document.getElementById("volumeFtFilter").value = "";
+
+    fetchStockData();  // Fetch unfiltered data
+}
+
 // Function to populate table
 function populateTable(data) {
     const tableBody = document.querySelector("#stock-table tbody");
@@ -81,8 +74,7 @@ function populateTable(data) {
     loadingText.style.display = "none"; // Hide loading text after data loads
 }
 
-// Auto-load data and populate dropdowns
+// Auto-load data
 document.addEventListener("DOMContentLoaded", () => {
-    populateDropdowns();
     fetchStockData();
 });
