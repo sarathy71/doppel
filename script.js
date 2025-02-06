@@ -1,7 +1,9 @@
 const API_URL = "https://hello-world-service-6uymma27bq-uc.a.run.app/";
+let currentSortColumn = "";
+let currentSortOrder = "asc";
 
-// Function to fetch data with filters
-async function fetchStockData(filters = {}) {
+// Function to fetch data with filters and sorting
+async function fetchStockData(filters = {}, sortColumn = "", sortOrder = "") {
     try {
         let url = API_URL + "?";
         Object.keys(filters).forEach((key, index) => {
@@ -10,9 +12,14 @@ async function fetchStockData(filters = {}) {
             }
         });
 
+        // Add sorting parameters
+        if (sortColumn) {
+            url += `&sort_by=${sortColumn}&order=${sortOrder}`;
+        }
+
         console.log("Fetching data from API with URL:", url);
         const response = await fetch(url);
-        
+
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
         const data = await response.json();
@@ -33,7 +40,7 @@ function applyFilters() {
         vol_ft_pc: document.getElementById("volumeFtFilter").value
     };
 
-    fetchStockData(filters);
+    fetchStockData(filters, currentSortColumn, currentSortOrder);
 }
 
 // Function to clear filters and reset to 'All'
@@ -43,7 +50,22 @@ function clearFilters() {
     document.getElementById("volumeFilter").value = "";
     document.getElementById("volumeFtFilter").value = "";
 
-    fetchStockData();  // Fetch unfiltered data
+    currentSortColumn = "";
+    currentSortOrder = "asc";
+
+    fetchStockData();
+}
+
+// Function to handle sorting
+function sortTable(column) {
+    if (currentSortColumn === column) {
+        currentSortOrder = currentSortOrder === "asc" ? "desc" : "asc";
+    } else {
+        currentSortColumn = column;
+        currentSortOrder = "asc";
+    }
+
+    fetchStockData({}, currentSortColumn, currentSortOrder);
 }
 
 // Function to populate table
