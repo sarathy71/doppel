@@ -57,14 +57,16 @@ function applyFilters() {
         price_pc: document.getElementById("priceFilter").value || null,
         price_ft_pc: document.getElementById("priceFtFilter").value || null,
         volume_pc: document.getElementById("volumeFilter").value || null,
-        vol_ft_pc: document.getElementById("volumeFtFilter").value || null
+        vol_ft_pc: document.getElementById("volumeFtFilter").value || null,
+        homo_price_horizon_dir: document.getElementById("trendDirFilter").value || null,
+        homo_price_horizon_confidence: document.getElementById("trendConfFilter").value || null
     };
 
     console.log("Applying filters:", filters);
     fetchStockData(filters, currentSortColumn, currentSortOrder);
 }
 
-// Function to clear filters and reset to 'Last 0 Day(s)'
+// Function to clear filters
 function clearFilters() {
     document.getElementById("endDateN").value = "0";
     document.getElementById("endDateM").value = "day";
@@ -72,6 +74,8 @@ function clearFilters() {
     document.getElementById("priceFtFilter").value = "";
     document.getElementById("volumeFilter").value = "";
     document.getElementById("volumeFtFilter").value = "";
+    document.getElementById("trendDirFilter").value = "";
+    document.getElementById("trendConfFilter").value = "";
 
     currentSortColumn = "";
     currentSortOrder = "asc";
@@ -111,6 +115,8 @@ function populateTable(data) {
                 <td>${item.price_ft_pc}</td>
                 <td>${item.volume_pc}</td>
                 <td>${item.vol_ft_pc}</td>
+                <td>${item.homo_price_horizon_dir || "N/A"}</td>
+                <td>${item.homo_price_horizon_confidence || "N/A"}</td>
             </tr>
         `;
         tableBody.innerHTML += row;
