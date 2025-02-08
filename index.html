@@ -12,10 +12,8 @@
     <!-- Filter Section -->
     <div>
         <label for="endDateN">Last:</label>
-        <select id="endDateN">
-            <!-- Generate numbers dynamically using JavaScript -->
-        </select>
-        
+        <select id="endDateN"></select>
+
         <label for="endDateM"></label>
         <select id="endDateM">
             <option value="day">Day(s)</option>
@@ -51,11 +49,27 @@
             <option value="95">95</option>
         </select>
 
+        <label for="trendDirFilter">Trend Direction:</label>
+        <select id="trendDirFilter">
+            <option value="">All</option>
+            <option value="Uptrend">Uptrend</option>
+            <option value="Downtrend">Downtrend</option>
+            <option value="Sideways">Sideways</option>
+        </select>
+
+        <label for="trendConfFilter">Trend Confidence (%) :</label>
+        <select id="trendConfFilter">
+            <option value="">All</option>
+            <option value="85">85</option>
+            <option value="95">95</option>
+        </select>
+
         <button onclick="applyFilters()">Apply Filters</button>
         <button onclick="clearFilters()">Clear Filters</button>
     </div>
 
     <div id="loading">Loading data...</div>
+
     <table id="stock-table">
         <thead>
             <tr>
@@ -65,6 +79,8 @@
                 <th onclick="sortTable('price_ft_pc')">Price FT (%) ⬍</th>
                 <th onclick="sortTable('volume_pc')">Volume (%) ⬍</th>
                 <th onclick="sortTable('vol_ft_pc')">Volume FT (%) ⬍</th>
+                <th onclick="sortTable('homo_price_horizon_dir')">Trend Direction ⬍</th>
+                <th onclick="sortTable('homo_price_horizon_confidence')">Trend Confidence (%) ⬍</th>
             </tr>
         </thead>
         <tbody></tbody>
